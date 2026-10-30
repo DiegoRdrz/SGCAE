@@ -1,0 +1,43 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sgcae-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Sgcae2024*
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Sgcae2024*' -C -Q 'SELECT 1' || /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Sgcae2024*' -Q 'SELECT 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - sgcae-network
+
+  sgcae-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sgcae-webapi
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=SGCAE_DB;User Id=sa;Password=Sgcae2024*;TrustServerCertificate=True;MultipleActiveResultSets=True;
+    networks:
+      - sgcae-network
+
+volumes:
+  sqlserver_data:
+
+networks:
+  sgcae-network:
+    driver: bridge

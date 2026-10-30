@@ -1,0 +1,332 @@
+{
+  "info": {
+    "_postman_id": "7f8b912c-4e31-41bb-b5c0-1a89c3d4e7f1",
+    "name": "SGCAE Access Control API",
+    "description": "API collection for Employee Access Control and Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Employees",
+      "item": [
+        {
+          "name": "1. Get Employees (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees?page=1&pageSize=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificationType\": \"ID\",\n  \"identificationNumber\": \"EMP-2001\",\n  \"firstName\": \"Alex\",\n  \"lastName\": \"Turner\",\n  \"email\": \"alex.turner@company.com\",\n  \"jobTitle\": \"Operations Lead\",\n  \"department\": \"Logistics\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees"]
+            }
+          }
+        },
+        {
+          "name": "3. Get Employee By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/{{employeeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees", "{{employeeId}}"]
+            }
+          }
+        },
+        {
+          "name": "4. Deactivate Employee",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Voluntary resignation.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/{{employeeId}}/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees", "{{employeeId}}", "deactivate"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Credentials",
+      "item": [
+        {
+          "name": "1. Assign Credential",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": \"{{employeeId}}\",\n  \"code\": \"CRD-5050\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/credentials/assign",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "credentials", "assign"]
+            }
+          }
+        },
+        {
+          "name": "2. Get Credential By Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/credentials/CRD-1001",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "credentials", "CRD-1001"]
+            }
+          }
+        },
+        {
+          "name": "3. Block Credential",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Temporarily misplaced by employee.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/credentials/CRD-1001/block",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "credentials", "CRD-1001", "block"]
+            }
+          }
+        },
+        {
+          "name": "4. Revoke Credential",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Badge damaged.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/credentials/CRD-1002/revoke",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "credentials", "CRD-1002", "revoke"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Access Points",
+      "item": [
+        {
+          "name": "1. Get Access Points",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access-points",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access-points"]
+            }
+          }
+        },
+        {
+          "name": "2. Create Access Point",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"South Loading Dock\",\n  \"description\": \"Night operations loading dock\",\n  \"physicalLocation\": \"Bay 4\",\n  \"isEnabled\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access-points",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access-points"]
+            }
+          }
+        },
+        {
+          "name": "3. Disable Access Point",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access-points/{{accessPointId}}/disable",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access-points", "{{accessPointId}}", "disable"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Access Control",
+      "item": [
+        {
+          "name": "1. Entry GRANTED (Active employee and valid credential)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"credentialCode\": \"CRD-1001\",\n  \"accessPointId\": \"{{accessPointId}}\",\n  \"movementType\": \"Entry\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access", "register"]
+            }
+          }
+        },
+        {
+          "name": "2. Exit GRANTED",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"credentialCode\": \"CRD-1001\",\n  \"accessPointId\": \"{{accessPointId}}\",\n  \"movementType\": \"Exit\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access", "register"]
+            }
+          }
+        },
+        {
+          "name": "3. DENIED: Inactive Employee / Revoked Credential (CRD-9999)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"credentialCode\": \"CRD-9999\",\n  \"accessPointId\": \"{{accessPointId}}\",\n  \"movementType\": \"Entry\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access", "register"]
+            }
+          }
+        },
+        {
+          "name": "4. DENIED: Suspended Credential (CRD-8888)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"credentialCode\": \"CRD-8888\",\n  \"accessPointId\": \"{{accessPointId}}\",\n  \"movementType\": \"Entry\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access", "register"]
+            }
+          }
+        },
+        {
+          "name": "5. DENIED: Unknown Credential",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"credentialCode\": \"CRD-UNKNOWN-999\",\n  \"accessPointId\": \"{{accessPointId}}\",\n  \"movementType\": \"Entry\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access", "register"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Access History",
+      "item": [
+        {
+          "name": "1. Get All Access History (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access/history?page=1&pageSize=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access", "history"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. Filter History By Denied",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access/history?result=Denied&page=1&pageSize=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access", "history"],
+              "query": [
+                { "key": "result", "value": "Denied" },
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Filter History By Granted",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/access/history?result=Granted&page=1&pageSize=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "access", "history"],
+              "query": [
+                { "key": "result", "value": "Granted" },
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "10" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
